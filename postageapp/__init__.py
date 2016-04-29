@@ -1,3 +1,4 @@
+# PostageApp Python Plugin
 
 __title__ = 'postageapp'
 __version__ = '0.1.0'

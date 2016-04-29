@@ -10,9 +10,9 @@ setup(
     license='MIT',
     packages=['postageapp'],
     install_requires=[
-        'requests',
+        'requests', 'ostruct'
     ],
-    test_suite='nose.collector',
-    tests_require=['nose'],
+    test_suite='py.test -s',
+    tests_require=['pytest'],
     zip_safe=False
 )

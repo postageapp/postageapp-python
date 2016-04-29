@@ -11,8 +11,21 @@ class TestRequest(TestCase):
         request = Request()
 
         self.assertTrue(isinstance(request, Request))
+        self.assertEqual(request.method, 'send_message')
 
-    def test_make_request(self):
+    def test_request_project_info(self):
+        request = Request('get_project_info')
+
+        result = request.send()
+
+        self.assertTrue(result['data'])
+
+    def test_send_message(self):
         request = Request()
 
-        pprint(request.send())
+        request.arguments.recipients = 'test@postageapp.com'
+        request.arguments.deliver = False
+
+        result = request.send()
+
+        self.assertTrue(result['data'])

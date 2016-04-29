@@ -2,10 +2,20 @@ import requests
 
 import postageapp
 
+from ostruct import OpenStruct
+
+import json
+
+from json import JSONEncoder
+
+class RequestEncoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
 class Request:
-    def __init__(self):
-        self._method = 'send_message'
-        self._body = { }
+    def __init__(self, method = None):
+        self._method = method or 'send_message'
+        self._arguments = OpenStruct()
 
     @property
     def method(self):
@@ -18,28 +28,40 @@ class Request:
         return self._method
 
     @property
-    def body(self):
-        self.body
+    def arguments(self):
+        return self._arguments
 
-    @body.setter
-    def body(self, _body):
-        self._body = _body
+    @arguments.setter
+    def arguments(self, _arguments):
+        self._arguments = _arguments
+        return self._arguments
 
-    def endpoint(self):
+    def api_url(self):
         if (postageapp.config.port):
-            return "%s://%s:%d/v.1.0/%s" % (
+            return "%s://%s:%d/v.1.0/%s.json" % (
                 postageapp.config.proto,
                 postageapp.config.host,
                 postageapp.config.port,
                 self.method
             )
         else:
-            return "%s://%s/v.1.0/%s" % (
+            return "%s://%s/v.1.0/%s.json" % (
                 postageapp.config.proto,
                 postageapp.config.host,
                 self.method
             )
 
+    def headers(self):
+        return {
+            'User-Agent': 'PostageApp Python %s (%s)' % (postageapp.__version__, postageapp.config.framework),
+            'Content-Type': 'application/json'
+        }
+
     def send(self):
-        r = requests.post(self.endpoint(), json=self._body)
+        body = {
+            'api_key': postageapp.config.api_key,
+            'arguments': self._arguments
+        }
+
+        r = requests.post(self.api_url(), data=RequestEncoder().encode(body), headers=self.headers())
         return r.json()
