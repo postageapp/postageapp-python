@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='postageapp',
-    version='0.1.0',
+    version='0.1.1',
     description='Library for sending email via the PostageApp service',
     url='http://github.com/postageapp/postageapp-python',
     author='Scott Tadman',
