@@ -2,7 +2,7 @@ import os
 
 class Config:
     def __init__(self, path=None):
-        self._host = 'api.postageapp.dev'
+        self._host = 'api.postageapp.com'
         self._proto = 'http'
         self._port = None
         self._api_key = None
